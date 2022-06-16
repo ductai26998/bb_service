@@ -16,6 +16,61 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+# ]
+
+
+# from account.views import LoginWithEmailOrUsername, VerifyOTP
+# from account.views import salon as salon_views
+# from account.views import user as user_views
+from django.conf.urls import include, url
+from django.contrib import admin
+from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+
+from . import views
+
+router = DefaultRouter()
+
+router.register("services", views.ServiceViewSet)
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("admin/", admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
+    path("", include(router.urls)),
 ]
+
+# urlpatterns = [
+#     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+#     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+#     path("admin/", admin.site.urls),
+#     path("api-auth/", include("rest_framework.urls")),
+#     # url("", include("account.urls")),
+#     # url("", include("urls")),
+#     # url("", include("booking.urls")),
+#     # url("verifyOTP/", VerifyOTP.as_view(), name="verify_user"),
+#     # url("login/", LoginWithEmailOrUsername.as_view(), name="login"),
+#     # # apis for salon
+#     # url("registerSalon/", salon_views.SalonRegister.as_view(), name="register_salon"),
+#     # # apis for user
+#     # url("registerUser/", user_views.UserRegister.as_view(), name="register_user"),
+# ]
+
+# from django.urls import include, path
+# from rest_framework.routers import DefaultRouter
+
+# from . import views
+
+# router = DefaultRouter()
+
+# router.register("services", views.ServiceViewSet)
+
+# urlpatterns = [
+#     path("", include(router.urls)),
+# ]
